@@ -1,14 +1,18 @@
 const express = require('express');
 const {
     clearSessionValue,
-    emptyCart,
     getCountryList,
     getId,
     sendEmail,
     getEmailTemplate,
-    clearCustomer,
-    paginateData
+    clearCustomer
 } = require('../lib/common');
+const {
+    paginateData,
+} = require('../lib/paginate');
+const {
+    emptyCart
+} = require('../lib/cart');
 const { restrict, checkAccess } = require('../lib/auth');
 const { indexOrders } = require('../lib/indexing');
 const router = express.Router();

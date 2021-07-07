@@ -1,4 +1,4 @@
-/* eslint-disable prefer-arrow-callback, no-var, no-tabs */
+/* eslint-disable prefer-arrow-callback, no-var, no-tabs, prefer-template */
 /* globals showNotification, numeral, feather */
 $(document).ready(function (){
     if($(window).width() < 768){
@@ -451,6 +451,44 @@ $(document).ready(function (){
                 showNotification(msg.responseJSON.message, 'danger');
             });
         }
+    });
+
+    // On create review
+    $(document).on('click', '#add-review', function(e){
+        $.ajax({
+            method: 'POST',
+            url: '/customer/check',
+            data: {}
+        })
+		.done(function(msg){
+            $('#reviewModal').modal('show');
+        })
+        .fail(function(){
+            showNotification('You need to be logged in to create a review', 'danger', false, '/customer/account');
+        });
+    });
+
+    // Create review
+    $(document).on('click', '#addReview', function(e){
+        $.ajax({
+            method: 'POST',
+            url: '/product/addreview',
+            data: {
+                product: $('#product').val(),
+                title: $('#review-title').val(),
+                description: $('#review-description').val(),
+                rating: $('#review-rating').val()
+            }
+        })
+		.done(function(msg){
+            showNotification(msg.message, 'success', true);
+        })
+        .fail(function(msg){
+            if(msg.responseJSON.message === 'You need to be logged in to create a review'){
+                showNotification(msg.responseJSON.message, 'danger', false, '/customer/account');
+            }
+            showNotification(msg.responseJSON.message, 'danger');
+        });
     });
 
     // On empty cart click
